@@ -13,10 +13,10 @@ class Transaction {
 
     outputMap[recipient] = amount;
     outputMap[senderWallet.publicKey] = senderWallet.balance - amount;
-    return outputMap
+    return outputMap;
   }
 
-  createInput({ senderWallet, outputMap}) {
+  createInput({ senderWallet, outputMap }) {
     const input = {
       timestamp: Date.now(),
       amount: senderWallet.balance,
@@ -31,7 +31,7 @@ class Transaction {
       throw new Error('Amount exceeds balance');
     }
 
-    if(!this.outputMap[recipient]) {
+    if (!this.outputMap[recipient]) {
       this.outputMap[recipient] = amount;
     } else {
       this.outputMap[recipient] = this.outputMap[recipient] + amount;
@@ -63,8 +63,8 @@ class Transaction {
       signature
     })) {
       console.error(`Invalid transaction signature from ${address}`);
-      return false
-    };
+      return false;
+    }
 
     return true;
   }
