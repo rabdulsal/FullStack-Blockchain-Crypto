@@ -24,13 +24,13 @@ describe('Transaction', () => {
 
     it('outputs the amount to the recipient', () => {
       expect(transaction.outputMap[recipient]).toEqual(amount);
-    })
+    });
 
     it('outputs the remaining balance for the `senderWallet`', () => {
       expect(transaction.outputMap[senderWallet.publicKey])
       .toEqual(senderWallet.balance - amount);
     });
-  })
+  });
 
   describe('input', () => {
     it('has an `input`', () => {
@@ -90,8 +90,8 @@ describe('Transaction', () => {
           expect(Transaction.validTransaction(transaction)).toBe(false);
           expect(errorMock).toHaveBeenCalled();
         });
-      })
-    })
+      });
+    });
   });
 
   describe('update()', () => {
@@ -118,7 +118,7 @@ describe('Transaction', () => {
         transaction.update({
           senderWallet,
           recipient: nextRecipient,
-          amount: nextAmount })
+          amount: nextAmount });
       });
 
       it('outputs the amount to the next recipient', () => {

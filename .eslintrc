@@ -1,0 +1,13 @@
+{
+  "extends": "rallycoding",
+  "rules": {
+    "arrow-body-style": 0
+    },
+  "globals": {
+    "describe": true,
+    "beforeEach": true,
+    "it": true,
+    "expect": true,
+    "jest": true,
+  }
+}
