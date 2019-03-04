@@ -44,7 +44,7 @@ class Transaction {
       this.outputMap[recipient] = this.outputMap[recipient] + amount;
     }
 
-    this.outputMap[senderWallet.publicKey] = this.outputMap[senderWallet.publicKey] - amount
+    this.outputMap[senderWallet.publicKey] = this.outputMap[senderWallet.publicKey] - amount;
 
     this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
   }
