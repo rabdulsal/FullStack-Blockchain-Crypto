@@ -5,10 +5,11 @@ const Blockchain = require('../blockchain');
 const { STARTING_BALANCE } = require('../config');
 
 describe('Wallet', () => {
-  let wallet;
+  let wallet, walletKey;
 
   beforeEach(() => {
     wallet = new Wallet();
+    walletKey = wallet.publicKey;
   });
 
   it('has a `balance`', () => {
@@ -25,7 +26,7 @@ describe('Wallet', () => {
     it('verifies a signature', () => {
       expect(
         verifySignature({
-          publicKey: wallet.publicKey,
+          publicKey: walletKey,
           data,
           signature: wallet.sign(data)
         })
@@ -35,7 +36,7 @@ describe('Wallet', () => {
     it('does not verify invalid signature', () => {
       expect(
         verifySignature({
-          publicKey: wallet.publicKey,
+          publicKey: walletKey,
           data,
           signature: new Wallet().sign(data)
         })
@@ -68,7 +69,7 @@ describe('Wallet', () => {
       });
 
       it('matches the transaction input with the wallet', () => {
-        expect(transaction.input.address).toEqual(wallet.publicKey);
+        expect(transaction.input.address).toEqual(walletKey);
       });
 
       it('outputs the amount to the recpient', () => {
@@ -109,7 +110,7 @@ describe('Wallet', () => {
         expect(
           Wallet.calculateBalance({
             chain: blockchain.chain,
-            address: wallet.publicKey
+            address: walletKey
           })
         ).toEqual(STARTING_BALANCE);
       });
@@ -120,12 +121,12 @@ describe('Wallet', () => {
 
       beforeEach(() => {
         transactionOne = new Wallet().createTransaction({
-          recipient: wallet.publicKey,
+          recipient: walletKey,
           amount: 50
         });
 
         transactionTwo = new Wallet().createTransaction({
-          recipient: wallet.publicKey,
+          recipient: walletKey,
           amount: 20
         });
 
@@ -136,13 +137,69 @@ describe('Wallet', () => {
         expect(
           Wallet.calculateBalance({
             chain: blockchain.chain,
-            address: wallet.publicKey
+            address: walletKey
           })
         ).toEqual(
           STARTING_BALANCE +
-          transactionOne.outputMap[wallet.publicKey] +
-          transactionTwo.outputMap[wallet.publicKey]
+          transactionOne.outputMap[walletKey] +
+          transactionTwo.outputMap[walletKey]
         );
+      });
+    });
+
+    describe('and the wallet has made a transaction', () => {
+      let recentTransaction;
+
+      beforeEach(() => {
+        recentTransaction = wallet.createTransaction({
+          recipient: 'foo-address',
+          amount: 30
+        });
+
+        blockchain.addBlock({ data: [recentTransaction] });
+      });
+
+      it('returns the output amount of the recent transaction', () => {
+        expect(
+          Wallet.calculateBalance({
+            chain: blockchain.chain,
+            address: walletKey
+          })
+        ).toEqual(recentTransaction.outputMap[walletKey]);
+      });
+
+      describe('and there are outputs next to and after the recent transaction', () => {
+        let sameBlockTransaction, nextBlockTransaction;
+
+        beforeEach(() => {
+          recentTransaction = wallet.createTransaction({
+            recipient: 'later-foo-address',
+            amount: 60
+          });
+
+          sameBlockTransaction = Transaction.rewardTransaction({ minerWallet: wallet });
+
+          blockchain.addBlock({ data: [recentTransaction, sameBlockTransaction] });
+
+          nextBlockTransaction = new Wallet().createTransaction({
+            recipient: walletKey, amount: 75
+          });
+
+          blockchain.addBlock({ data: [nextBlockTransaction] });
+        });
+
+        it('includes the output amount in the returned balance', () => {
+          expect(
+            Wallet.calculateBalance({
+              chain: blockchain.chain,
+              address: walletKey
+            })
+          ).toEqual(
+            recentTransaction.outputMap[walletKey] +
+            sameBlockTransaction.outputMap[walletKey] +
+            nextBlockTransaction.outputMap[walletKey]
+          );
+        });
       });
     });
   });
