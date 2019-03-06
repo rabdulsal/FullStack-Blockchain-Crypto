@@ -5,6 +5,7 @@
     "one-var-declaration-per-line": "off",
     "one-var": "off",
     "space-infix-ops": "off",
+    "eol-last": "off",
     },
   "globals": {
     "describe": true,
@@ -12,5 +13,7 @@
     "it": true,
     "expect": true,
     "jest": true,
+    "fetch": true,
+    "document": true,
   }
 }
