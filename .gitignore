@@ -23,7 +23,10 @@ DerivedData
 project.xcworkspace
 
 # Miscellaneous
+#
 private/
+client/dist/
+.cache/
 
 # Android/IntelliJ
 #
