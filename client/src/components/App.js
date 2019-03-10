@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import { WALLET_INFO_URI } from '../../../routes';
+import { WALLET_INFO_PATH } from '../../../routes';
 
 class App extends Component {
   state = { walletInfo: {} };
 
   componentDidMount() {
-    fetch(WALLET_INFO_URI)
+    fetch(`${document.location.origin}${WALLET_INFO_PATH}`)
     .then(response => response.json())
     .then(json => this.setState({ walletInfo: json }));
   }

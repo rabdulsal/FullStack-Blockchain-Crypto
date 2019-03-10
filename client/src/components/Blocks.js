@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Block from './Block.js';
+import { BLOCKS_PATH } from '../../../routes';
 
 class Blocks extends Component {
   state = { blocks: [] };
 
   componentDidMount() {
-    fetch('http://localhost:3000/api/blocks')
+    fetch(`${document.location.origin}${BLOCKS_PATH}`)
     .then(response => response.json())
     .then(json => this.setState({ blocks: json }));
   }

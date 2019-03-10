@@ -2,31 +2,32 @@ import React, { Component } from 'react';
 import { FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import history from '../history';
+import { TRANSACT_PATH } from '../../../routes';
 
 export default class ConductTransaction extends Component {
   state = { recipient: '', amount: 0 };
 
-updateRecipient = event => {
-  this.setState({ recipient: event.target.value });
-}
+  updateRecipient = event => {
+    this.setState({ recipient: event.target.value });
+  }
 
-updateAmount = event => {
-  this.setState({ amount: Number(event.target.value) });
-}
+  updateAmount = event => {
+    this.setState({ amount: Number(event.target.value) });
+  }
 
-conductTransaction = () => {
-  const { recipient, amount } = this.state;
+  conductTransaction = () => {
+    const { recipient, amount } = this.state;
 
-  fetch('http://localhost:3000/api/transact', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ recipient, amount })
-  }).then(response => response.json())
-  .then(json => {
-    alert(json.message || json.type);
-    history.push('/transaction-pool');
-  });
-}
+    fetch(`${document.location.origin}${TRANSACT_PATH}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipient, amount })
+    }).then(response => response.json())
+    .then(json => {
+      alert(json.message || json.type);
+      history.push('/transaction-pool');
+    });
+  }
 
   render() {
     return (

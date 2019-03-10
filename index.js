@@ -11,8 +11,8 @@ const TransactionMiner = require('./app/transaction-miner');
 const {
   DEFAULT_PORT,
   ROOT_NODE_ADDRESS,
-  WALLET_INFO_LINK,
-  TRANSACTION_POOL_MAP_LINK,
+  WALLET_INFO_PATH,
+  TRANSACTION_POOL_MAP_PATH,
   TRANSACTION_POOL_MAP_URI,
 } = require('./routes');
 
@@ -67,7 +67,7 @@ app.post('/api/transact', (req, res) => {
   res.json({ type: 'success', transaction });
 });
 
-app.get(TRANSACTION_POOL_MAP_LINK, (req, res) => {
+app.get(TRANSACTION_POOL_MAP_PATH, (req, res) => {
   res.json(transactionPool.transactionMap);
 });
 
@@ -76,7 +76,7 @@ app.get('/api/mine-transactions', (req, res) => {
   res.redirect('/api/blocks');
 });
 
-app.get(WALLET_INFO_LINK, (req, res) => {
+app.get(WALLET_INFO_PATH, (req, res) => {
   const address = wallet.publicKey;
 
   res.json({
