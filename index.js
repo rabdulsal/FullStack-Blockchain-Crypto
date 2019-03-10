@@ -8,6 +8,14 @@ const TransactionPool = require('./wallet/transaction-pool');
 const Wallet = require('./wallet');
 const TransactionMiner = require('./app/transaction-miner');
 
+const {
+  DEFAULT_PORT,
+  ROOT_NODE_ADDRESS,
+  WALLET_INFO_LINK,
+  TRANSACTION_POOL_MAP_LINK,
+  TRANSACTION_POOL_MAP_URI,
+} = require('./routes');
+
 const app = express();
 const blockchain = new Blockchain();
 const transactionPool = new TransactionPool();
@@ -19,8 +27,6 @@ const transactionMiner = new TransactionMiner({
   wallet,
   pubsub
 });
-const DEFAULT_PORT = 3000;
-const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
 
 setTimeout(() => pubsub.broadcastChain(), 1000);
 
@@ -61,7 +67,7 @@ app.post('/api/transact', (req, res) => {
   res.json({ type: 'success', transaction });
 });
 
-app.get('/api/transaction-pool-map', (req, res) => {
+app.get(TRANSACTION_POOL_MAP_LINK, (req, res) => {
   res.json(transactionPool.transactionMap);
 });
 
@@ -70,7 +76,7 @@ app.get('/api/mine-transactions', (req, res) => {
   res.redirect('/api/blocks');
 });
 
-app.get('/api/wallet-info', (req, res) => {
+app.get(WALLET_INFO_LINK, (req, res) => {
   const address = wallet.publicKey;
 
   res.json({
@@ -95,7 +101,7 @@ const syncWithRootState = () => {
     }
   });
 
-  request({ url: `${ROOT_NODE_ADDRESS}/api/transaction-pool-map` }, (error, response, body) => {
+  request({ url: TRANSACTION_POOL_MAP_URI }, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       const rootTransactionMap = JSON.parse(body);
 

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import { WALLET_INFO_URI } from '../../../routes';
 
 class App extends Component {
   state = { walletInfo: {} };
 
   componentDidMount() {
-    fetch('http://localhost:3000/api/wallet-info')
+    fetch(WALLET_INFO_URI)
     .then(response => response.json())
     .then(json => this.setState({ walletInfo: json }));
   }
@@ -23,6 +24,8 @@ class App extends Component {
         </div>
         <br />
         <div><Link to='/blocks'>Blocks</Link></div>
+        <div><Link to='/conduct-transaction'>Make Transaction</Link></div>
+        <div><Link to='/transaction-pool'>Transaction Pool</Link></div>
         <br />
         <div className='WalletInfo'>
           <div>Address: {address}</div>
