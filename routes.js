@@ -7,6 +7,7 @@ const TRANSACT_URI = `${ROOT_NODE_ADDRESS}${TRANSACT_PATH}`;
 const TRANSACTION_POOL_MAP_PATH = '/api/transaction-pool-map';
 const TRANSACTION_POOL_MAP_URI = `${ROOT_NODE_ADDRESS}${TRANSACTION_POOL_MAP_PATH}`;
 const MINE_TRANSACTIONS_PATH = '/api/mine-transactions';
+const BLOCKS_PATH = '/api/blocks';
 
 module.exports = {
   DEFAULT_PORT,
@@ -18,4 +19,5 @@ module.exports = {
   WALLET_INFO_PATH,
   WALLET_INFO_URI,
   MINE_TRANSACTIONS_PATH,
+  BLOCKS_PATH
 };

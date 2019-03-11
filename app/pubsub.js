@@ -1,11 +1,19 @@
 const PubNub = require('pubnub');
-const credentials = require('../private/PubNubCredentials');
 
 const CHANNELS = {
   TEST: 'TEST',
   BLOCKCHAIN: 'BLOCKCHAIN',
   TRANSACTION: 'TRANSACTION',
 };
+
+const credentials = process.env.ENV==='development' ?
+  require('../private/PubNubCredentials') :
+  {
+    publishKey: process.env.PUBNUB_PUBKEY,
+    subscribeKey: process.env.PUBNUB_SUBKEY,
+    secretKey: process.env.PUBNUB_SECRET
+  };
+
 
 class PubSub {
   constructor({ blockchain, transactionPool, wallet }) {
